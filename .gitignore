@@ -15,10 +15,10 @@ packages/db/src/generated/
 .env.*
 !.env.example
 
-# benchmark execution output
-workspace/
-artifacts/
-runs/
+# benchmark execution output (repository root only)
+/workspace/
+/artifacts/
+/runs/
 *.log
 
 # dogwalk is an independent git repository
