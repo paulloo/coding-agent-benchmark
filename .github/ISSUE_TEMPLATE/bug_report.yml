@@ -1,0 +1,54 @@
+---
+name: Bug 报告
+description: 报告平台、评测器或适配器中的可复现问题
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。请先确认这不是基准项目被评测 Agent 写坏导致的失败，而是平台本身的问题。
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 实际发生了什么，期望发生什么。
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      description: 包含命令、批次 ID、任务 key 和最小化的输入。
+      placeholder: |
+        1. pnpm bootstrap
+        2. pnpm evaluate --run ...
+        3. 观察到 ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 相关日志
+      description: 请先脱敏 API Key、数据库连接串和个人路径。
+      render: text
+  - type: input
+    id: version
+    attributes:
+      label: 版本
+      description: 提交哈希或 release 版本。
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: 影响范围
+      options:
+        - Dashboard / API
+        - 评分与验收
+        - Agent 适配器
+        - Worktree / 执行器
+        - 文档
+        - 其他
+    validations:
+      required: true

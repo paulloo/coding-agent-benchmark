@@ -2,6 +2,16 @@
   "name": "coding-agent-benchmark",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "author": "paul",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulloo/coding-agent-benchmark.git"
+  },
+  "homepage": "https://github.com/paulloo/coding-agent-benchmark#readme",
+  "bugs": {
+    "url": "https://github.com/paulloo/coding-agent-benchmark/issues"
+  },
   "type": "module",
   "packageManager": "pnpm@10.34.9",
   "engines": {

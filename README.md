@@ -1,5 +1,11 @@
 # Coding Agent Benchmark
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Status: v0.1.0](https://img.shields.io/badge/status-v0.1.0-5b8c69)](docs/architecture.md)
+
+A reproducible, quantitative benchmark platform for AI coding agents.
+同一份需求、同一个起点、同一套验收，横向比较 Claude Code、Codex CLI、OpenCode 等工具的真实工程能力。
+
 可复现、可量化、可扩展的 AI Coding Agent 横向评测平台。
 
 平台把「控制平面」和「执行平面」分开：控制平面（Next.js Dashboard + PostgreSQL）负责 Agent 登记、任务版本、批次计划和结果展示；执行平面（Git Worktree + CLI Adapter + 独立评测）负责真正运行 Agent、收集产物和验收。Agent 不接触控制平面数据库。
@@ -117,3 +123,13 @@ GET    /api/reports/:runId
 2. 时区 Bug 与 Review 目标快照，配合隐藏测试。
 3. 执行平面容器（`evaluator-runner`）与隐藏测试挂载。
 4. Dashboard 写操作界面（创建批次、取消、查看日志）、shadcn/ui 组件层、Playwright 页面测试。
+
+## 参与贡献
+
+开发环境、提交规范与评测完整性约束见 [CONTRIBUTING.md](CONTRIBUTING.md)。项目行为准则见 [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)。
+
+新增 Agent 适配器请先阅读 [docs/agent-adapter.md](docs/agent-adapter.md)；新增 Prompt 必须产生新版本。
+
+## 许可证
+
+本项目采用 [MIT License](LICENSE)。

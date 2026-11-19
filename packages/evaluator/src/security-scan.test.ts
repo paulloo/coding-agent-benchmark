@@ -20,10 +20,8 @@ describe("scanSecrets", () => {
   it("finds a committed private key and reports its location", async () => {
     const root = await workspace();
     await mkdir(path.join(root, "src"));
-    await writeFile(
-      path.join(root, "src", "key.ts"),
-      'export const key = "-----BEGIN PRIVATE KEY-----";\n',
-    );
+    const marker = ["-----BEGIN", "PRIVATE KEY-----"].join(" ");
+    await writeFile(path.join(root, "src", "key.ts"), `export const key = "${marker}";\n`);
 
     const findings = await scanSecrets({ workspacePath: root, artifactDir: root });
     expect(findings).toHaveLength(1);
@@ -34,9 +32,10 @@ describe("scanSecrets", () => {
   it("ignores node_modules", async () => {
     const root = await workspace();
     await mkdir(path.join(root, "node_modules", "pkg"), { recursive: true });
+    const fakeKey = ["AKIA", "ABCDEFGHIJKLMNOP"].join("");
     await writeFile(
       path.join(root, "node_modules", "pkg", "index.js"),
-      "const token = 'AKIAABCDEFGHIJKLMNOP';\n",
+      `const token = '${fakeKey}';\n`,
     );
 
     expect(await scanSecrets({ workspacePath: root, artifactDir: root })).toHaveLength(0);
@@ -45,12 +44,13 @@ describe("scanSecrets", () => {
   it("prefers the diff and only inspects added lines", async () => {
     const root = await workspace();
     const diffPath = path.join(root, "changes.diff");
+    const oldMarker = `-const old = '${["-----BEGIN", "PRIVATE KEY-----"].join(" ")}';`;
     await writeFile(
       diffPath,
       [
         "--- a/src/config.ts",
         "+++ b/src/config.ts",
-        "-const old = '----BEGIN PRIVATE KEY-----';",
+        oldMarker,
         "+const next = process.env.DATABASE_URL;",
         "",
       ].join("\n"),

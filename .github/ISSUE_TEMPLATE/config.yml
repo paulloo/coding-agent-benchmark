@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 安全漏洞
+    url: https://github.com/paulloo/coding-agent-benchmark/security/advisories/new
+    about: 请通过私有安全公告报告漏洞，不要公开利用细节。
+  - name: 使用与架构文档
+    url: https://github.com/paulloo/coding-agent-benchmark/tree/main/docs
+    about: 提交问题前先查阅架构、协议、评分与安全文档。
