@@ -1,0 +1,26 @@
+name: coding-agent-benchmark
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: cab-postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: cab
+      POSTGRES_PASSWORD: cab_local_dev
+      POSTGRES_DB: cab_benchmark
+      TZ: UTC
+      PGTZ: UTC
+    volumes:
+      - cab-pgdata:/var/lib/postgresql/data
+      - ./docker/initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cab -d cab_benchmark"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  cab-pgdata:

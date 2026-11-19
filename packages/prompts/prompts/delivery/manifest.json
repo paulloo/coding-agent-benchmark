@@ -1,0 +1,28 @@
+{
+  "id": "delivery",
+  "name": "CSV 导出功能自主交付",
+  "version": 1,
+  "category": "DELIVERY",
+  "description": "从需求理解到实现、测试、安全检查和交付说明，独立完成遛狗记录 CSV 导出功能。",
+  "weight": 20,
+  "timeoutSeconds": 2700,
+  "baseRef": "snapshot/base",
+  "variables": [],
+  "expectedOutput": [
+    "可用的 CSV 导出功能",
+    "通过的自动化测试",
+    "完整 Git Diff",
+    "实现说明与已知限制",
+    "是否可合并的结论"
+  ],
+  "scoringRules": [
+    "需求覆盖完整，包含筛选、日期范围和文件名规则",
+    "服务端权限隔离，不能导出他人的数据",
+    "正确处理 UTF-8 BOM 与中文",
+    "防止 CSV Formula Injection",
+    "大数据量下不一次性加载全部记录",
+    "测试覆盖安全与边界条件",
+    "主动执行类型检查和测试"
+  ],
+  "requiredChecks": ["typecheck", "unit", "e2e", "security"]
+}

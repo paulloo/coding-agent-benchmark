@@ -1,0 +1,26 @@
+{
+  "id": "code-review",
+  "name": "分支代码审查",
+  "version": 1,
+  "category": "CODE_REVIEW",
+  "description": "审查当前分支相对 main 的代码变更，输出按严重程度排序的真实问题清单。",
+  "weight": 10,
+  "timeoutSeconds": 1800,
+  "baseRef": "snapshot/review-target",
+  "variables": [],
+  "expectedOutput": [
+    "按严重程度排序的问题清单",
+    "每个问题的文件路径和行号",
+    "根因、实际后果与修复方案",
+    "是否建议合并的结论"
+  ],
+  "scoringRules": [
+    "只报告真实存在的问题，误报扣分",
+    "覆盖权限、查询性能、数据一致性、类型安全和异步错误",
+    "问题定位到文件与行号",
+    "修复建议可执行",
+    "不把个人风格偏好当作缺陷",
+    "不得修改任何文件"
+  ],
+  "requiredChecks": []
+}

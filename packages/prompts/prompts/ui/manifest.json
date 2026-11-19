@@ -1,0 +1,27 @@
+{
+  "id": "ui",
+  "name": "Dashboard 页面设计与实现",
+  "version": 1,
+  "category": "UI",
+  "description": "按照统一视觉规范实现 DogWalk Dashboard，并接入真实业务数据。",
+  "weight": 15,
+  "timeoutSeconds": 2700,
+  "baseRef": "snapshot/base",
+  "variables": [],
+  "expectedOutput": [
+    "符合视觉规范的 Dashboard 页面",
+    "桌面端与移动端截图",
+    "真实 API 数据接入",
+    "可用的筛选、详情和新增交互",
+    "Playwright 检查结果"
+  ],
+  "scoringRules": [
+    "视觉规范一致性（颜色、圆角、层级、阴影克制）",
+    "布局信息层级清晰，无对齐和溢出问题",
+    "移动端适配合理，不是简单缩放",
+    "数据来自真实 API，无硬编码假数据",
+    "没有无效按钮和无效链接",
+    "浏览器控制台无错误"
+  ],
+  "requiredChecks": ["typecheck", "build", "e2e"]
+}

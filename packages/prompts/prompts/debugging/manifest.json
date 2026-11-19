@@ -1,0 +1,26 @@
+{
+  "id": "debugging",
+  "name": "时区日期筛选缺陷定位与修复",
+  "version": 1,
+  "category": "DEBUGGING",
+  "description": "在 Asia/Shanghai 时区下复现并修复遛狗记录日期筛选遗漏当天记录的问题。",
+  "weight": 20,
+  "timeoutSeconds": 2700,
+  "baseRef": "snapshot/bug-timezone",
+  "variables": [],
+  "expectedOutput": [
+    "问题复现步骤与观察结果",
+    "根因说明",
+    "修复代码",
+    "能够防止复发的回归测试",
+    "测试执行结果"
+  ],
+  "scoringRules": [
+    "定位到真实根因，而不是在某一层硬编码 8 小时",
+    "同时考虑前端日期构造、API 参数、服务端范围查询和数据库存储语义",
+    "覆盖一天的开始和结束边界",
+    "回归测试在修复前失败、修复后通过",
+    "不破坏其他日期筛选行为"
+  ],
+  "requiredChecks": ["typecheck", "unit", "e2e"]
+}

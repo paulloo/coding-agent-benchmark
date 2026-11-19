@@ -1,0 +1,25 @@
+{
+  "id": "understanding",
+  "name": "项目理解与架构分析",
+  "version": 1,
+  "category": "UNDERSTANDING",
+  "description": "在不修改代码的前提下，分析 DogWalk 测试项目的技术栈、模块边界、数据模型与风险。",
+  "weight": 10,
+  "timeoutSeconds": 1800,
+  "baseRef": "snapshot/base",
+  "variables": [],
+  "expectedOutput": [
+    "架构分析报告，包含 Mermaid 架构图",
+    "核心模块职责说明",
+    "数据库 ER 关系图",
+    "技术债务清单",
+    "最值得优先处理的五个问题"
+  ],
+  "scoringRules": [
+    "结论必须能对应到具体文件和代码行",
+    "正确描述前后端调用链与数据流",
+    "识别真实存在的技术债，不臆测不存在的模块",
+    "不得修改任何项目文件"
+  ],
+  "requiredChecks": []
+}

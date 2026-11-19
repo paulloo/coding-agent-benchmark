@@ -1,0 +1,256 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../packages/db/src/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = ""
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AgentCategory {
+  CLI
+  IDE
+  EXTENSION
+  CLOUD
+}
+
+enum TaskCategory {
+  UNDERSTANDING
+  FEATURE_DEVELOPMENT
+  DEBUGGING
+  UI
+  CODE_REVIEW
+  DELIVERY
+}
+
+enum BenchmarkMode {
+  NATIVE
+  CONTROLLED
+}
+
+enum BenchmarkRunStatus {
+  DRAFT
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum AgentRunStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  TIMEOUT
+  CANCELLED
+  SKIPPED
+}
+
+enum IsolationMode {
+  CONTAINER
+  HOST
+}
+
+enum EvaluationCategory {
+  BUILD
+  TEST
+  SECURITY
+  QUALITY
+  DIFF
+}
+
+enum ArtifactType {
+  STDOUT
+  STDERR
+  DIFF
+  REPORT
+  SCREENSHOT
+  OTHER
+}
+
+model Agent {
+  id           String        @id @default(cuid())
+  slug         String        @unique
+  name         String
+  vendor       String
+  category     AgentCategory
+  version      String        @default("unknown")
+  adapter      String
+  enabled      Boolean       @default(true)
+  capabilities Json
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  runs         AgentRun[]
+
+  @@index([vendor])
+  @@map("agents")
+}
+
+model Prompt {
+  id          String          @id @default(cuid())
+  slug        String          @unique
+  name        String
+  category    TaskCategory
+  description String
+  createdAt   DateTime        @default(now())
+  versions    PromptVersion[]
+
+  @@map("prompts")
+}
+
+model PromptVersion {
+  id            String          @id @default(cuid())
+  promptId      String
+  prompt        Prompt          @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  version       Int
+  content       String
+  inputSchema   Json
+  expectedOutput Json
+  scoringRules  Json
+  createdAt     DateTime        @default(now())
+  tasks         BenchmarkTask[]
+  agentRuns     AgentRun[]
+
+  @@unique([promptId, version])
+  @@map("prompt_versions")
+}
+
+model BenchmarkTask {
+  id              String      @id @default(cuid())
+  key             String      @unique
+  name            String
+  description     String
+  category        TaskCategory
+  promptVersionId String
+  promptVersion   PromptVersion @relation(fields: [promptVersionId], references: [id])
+  weight          Int
+  timeoutSeconds  Int
+  baseRef         String?
+  requiredChecks  String[]
+  enabled         Boolean     @default(true)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  agentRuns       AgentRun[]
+
+  @@index([category])
+  @@map("benchmark_tasks")
+}
+
+model BenchmarkRun {
+  id             String            @id @default(cuid())
+  name           String
+  status         BenchmarkRunStatus @default(DRAFT)
+  mode           BenchmarkMode      @default(NATIVE)
+  initialCommit  String?
+  configuration  Json              @default("{}")
+  startedAt      DateTime?
+  finishedAt     DateTime?
+  notes          String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  agentRuns      AgentRun[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("benchmark_runs")
+}
+
+model AgentRun {
+  id              String          @id @default(cuid())
+  benchmarkRunId  String
+  benchmarkRun    BenchmarkRun    @relation(fields: [benchmarkRunId], references: [id], onDelete: Cascade)
+  agentId         String
+  agent           Agent           @relation(fields: [agentId], references: [id])
+  taskId          String
+  task            BenchmarkTask   @relation(fields: [taskId], references: [id])
+  promptVersionId String
+  promptVersion   PromptVersion   @relation(fields: [promptVersionId], references: [id])
+  model           String?
+  modelVersion    String?
+  reasoningEffort String?
+  repetitionIndex Int             @default(0)
+  status          AgentRunStatus  @default(PENDING)
+  isolation       IsolationMode   @default(CONTAINER)
+  workspacePath   String?
+  initialCommit   String?
+  finalCommit     String?
+  startedAt       DateTime?
+  finishedAt      DateTime?
+  durationMs      Int?
+  exitCode        Int?
+  inputTokens     Int?
+  outputTokens    Int?
+  cachedTokens    Int?
+  costUsd         Decimal?        @db.Decimal(12, 6)
+  stdoutPath      String?
+  stderrPath      String?
+  diffPath        String?
+  environment     Json            @default("{}")
+  errorMessage    String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  score           BenchmarkScore?
+  evaluations     EvaluationResult[]
+  artifacts       BenchmarkArtifact[]
+
+  @@unique([benchmarkRunId, agentId, taskId, repetitionIndex])
+  @@index([agentId, createdAt])
+  @@index([status])
+  @@map("agent_runs")
+}
+
+model EvaluationResult {
+  id         String             @id @default(cuid())
+  agentRunId String
+  agentRun   AgentRun           @relation(fields: [agentRunId], references: [id], onDelete: Cascade)
+  checkKey   String
+  category   EvaluationCategory
+  passed     Boolean
+  score      Decimal?           @db.Decimal(6, 2)
+  details    Json               @default("{}")
+  rawLogPath String?
+  durationMs Int?
+  createdAt  DateTime           @default(now())
+
+  @@unique([agentRunId, checkKey])
+  @@index([category])
+  @@map("evaluation_results")
+}
+
+model BenchmarkScore {
+  id                String   @id @default(cuid())
+  agentRunId        String   @unique
+  agentRun          AgentRun @relation(fields: [agentRunId], references: [id], onDelete: Cascade)
+  completionScore   Decimal? @db.Decimal(6, 2)
+  qualityScore      Decimal? @db.Decimal(6, 2)
+  autonomyScore     Decimal? @db.Decimal(6, 2)
+  speedScore        Decimal? @db.Decimal(6, 2)
+  costScore         Decimal? @db.Decimal(6, 2)
+  stabilityScore    Decimal? @db.Decimal(6, 2)
+  experienceScore   Decimal? @db.Decimal(6, 2)
+  totalScore        Decimal? @db.Decimal(6, 2)
+  coverage          Decimal  @default(0) @db.Decimal(5, 4)
+  measuredDimensions String[]
+  missingDimensions  String[]
+  scoredBy          String   @default("automatic")
+  createdAt         DateTime @default(now())
+
+  @@map("benchmark_scores")
+}
+
+model BenchmarkArtifact {
+  id         String       @id @default(cuid())
+  agentRunId String
+  agentRun   AgentRun     @relation(fields: [agentRunId], references: [id], onDelete: Cascade)
+  type       ArtifactType
+  path       String
+  checksum   String
+  size       Int
+  createdAt  DateTime     @default(now())
+
+  @@index([agentRunId])
+  @@map("benchmark_artifacts")
+}

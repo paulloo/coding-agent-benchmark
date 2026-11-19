@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #f8f7f2;
+  --color-ink: #252820;
+  --color-ink-soft: #5c6157;
+  --color-primary: #5b8c69;
+  --color-primary-dark: #4a7557;
+  --color-card: #ffffff;
+  --color-muted: #e8efe5;
+  --color-line: #e4e2d9;
+  --color-danger: #b04a3a;
+  --color-warning: #a97b2f;
+  --radius-card: 1rem;
+  --font-sans: "Inter", "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    @apply bg-canvas text-ink antialiased;
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    @apply bg-muted text-ink;
+  }
+}

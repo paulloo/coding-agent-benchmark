@@ -1,0 +1,28 @@
+{
+  "id": "feature-development",
+  "name": "遛狗记录管理模块开发",
+  "version": 1,
+  "category": "FEATURE_DEVELOPMENT",
+  "description": "在现有 DogWalk 项目中实现完整的遛狗记录 CRUD、筛选、周统计、权限控制和自动化测试。",
+  "weight": 25,
+  "timeoutSeconds": 3600,
+  "baseRef": "snapshot/base",
+  "variables": [],
+  "expectedOutput": [
+    "可用的遛狗记录创建、编辑、删除、查看功能",
+    "按日期范围和狗狗筛选的记录列表",
+    "本周统计卡片",
+    "服务端 Zod 校验与权限检查",
+    "新增的单元测试与集成测试",
+    "类型检查和测试执行结果"
+  ],
+  "scoringRules": [
+    "数据库关系设计正确，记录与狗狗、用户正确关联",
+    "权限边界在服务端强制执行，不能只依赖前端隐藏",
+    "校验规则完整覆盖时长、距离、备注和起止时间",
+    "前后端数据结构一致",
+    "加载、空数据、错误状态齐全",
+    "测试真实执行并通过"
+  ],
+  "requiredChecks": ["typecheck", "lint", "unit", "build"]
+}

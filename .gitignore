@@ -1,0 +1,29 @@
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+test-results/
+playwright-report/
+
+# generated Prisma client
+packages/db/src/generated/
+
+# local environment
+.env
+.env.*
+!.env.example
+
+# benchmark execution output
+workspace/
+artifacts/
+runs/
+*.log
+
+# dogwalk is an independent git repository
+benchmarks/dogwalk/
+
+.DS_Store
+Thumbs.db
+*.tsbuildinfo
