@@ -16,7 +16,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "setup": "tsx scripts/setup.ts",
+    "bootstrap": "tsx scripts/setup.ts",
     "reset": "tsx scripts/reset.ts",
     "evaluate": "tsx scripts/evaluate.ts",
     "typecheck": "pnpm db:generate && tsc --noEmit -p tsconfig.json && pnpm -r --if-present typecheck",

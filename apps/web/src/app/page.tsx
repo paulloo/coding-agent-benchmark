@@ -54,7 +54,7 @@ export default async function DashboardPage() {
           <pre className="mt-4 overflow-x-auto rounded-xl bg-canvas p-4 text-xs text-ink-soft">
             {error instanceof Error ? error.message : String(error)}
           </pre>
-          <p className="mt-4 text-xs text-ink-soft">初始化命令：pnpm setup</p>
+          <p className="mt-4 text-xs text-ink-soft">初始化命令：pnpm bootstrap</p>
         </Card>
       </>
     );

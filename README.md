@@ -29,7 +29,7 @@
 
 ```bash
 pnpm install
-pnpm setup     # 创建 .env、启动 PostgreSQL、执行迁移、写入种子数据
+pnpm bootstrap  # 创建 .env、启动 PostgreSQL、执行迁移、写入种子数据
 pnpm dev       # http://localhost:3000
 ```
 

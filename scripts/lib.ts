@@ -23,11 +23,23 @@ export function runStep(
   if (!options.quiet) {
     console.log(`\n[${label}] ${command} ${args.join(" ")}`);
   }
-  const result = spawnSync(executable(command), [...args], {
+
+  // Node refuses to execute .cmd shims without a shell on Windows. The shell
+  // form is only used there, with every argument quoted explicitly.
+  const useShell = process.platform === "win32";
+  const quote = (value: string): string =>
+    /[\s"]/.test(value) ? `"${value.replace(/"/g, '\\"')}"` : value;
+  const executableName = executable(command);
+  const spawnCommand = useShell
+    ? [executableName, ...args].map(quote).join(" ")
+    : executableName;
+  const spawnArgs = useShell ? [] : [...args];
+
+  const result = spawnSync(spawnCommand, spawnArgs, {
     cwd: options.cwd ?? process.cwd(),
     env: { ...process.env, ...options.env },
     stdio: "inherit",
-    shell: false,
+    shell: useShell,
   });
 
   if (result.error) {
