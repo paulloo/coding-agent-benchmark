@@ -38,6 +38,7 @@ pnpm dev       # http://localhost:3000
 ```bash
 pnpm typecheck     # Prisma generate + 根脚本 + 所有工作区包
 pnpm test          # Vitest（39 个用例：评分、Worktree、适配器、安全扫描）
+pnpm test:smoke    # 对运行中的 Dashboard 做 17 项 API 与页面冒烟检查
 pnpm build         # 生产构建 Dashboard
 pnpm db:seed       # 幂等写入 Agent、Prompt、Task
 pnpm reset --yes   # 清空平台库并重新初始化
